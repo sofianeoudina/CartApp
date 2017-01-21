@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">CartApp</string>
+    <string name="online">Online</string>
+    <string name="createAccount"><u>Créer un compte</u></string>
+    <string name="validate">Enregistrer</string>
+    <string name="cancel">Annuler</string>
+    <string name="auth_failed">Les informations renseignées sont incorrectes. </string>
+    <string name="email_invalide">L\'adresse mail est invalide</string>
+    <string name="password_invalide">Le mot de passe est invalide</string>
+    <string name="no_password">Veuillez entrer le mot de passe</string>
+    <string name="logout">Se déconnecter</string>
+    <string name="name_user">Entrer votre prénom</string>
+    <string name="user_family_name">Entrer votre nom</string>
+    <string name="mail">E-mail</string>
+    <string name="mdp">Mot de passe</string>
+
+    <string name="error_name">Veuillez entrer votre prénom.</string>
+
+    <string name="error_familyname">Veuillez entrer votre nom.</string>
+
+    <string name="register">Veuillez remplir les champs ci-dessous pour vous enregistrer</string>
+    <string name="enterMail">Entrer votre adresse mail</string>
+    <string name="enterPwd">Entrer votre mot de passe</string>
+    <string name="confirmePwd">Confirmer votre mot de passe</string>
+
+    <string name="User">Utilisateur</string>
+    <string name="Passwordd">Mot de passe</string>
+    <string name="connection">Connexion</string>
+    <string name="connectionSuccess">Connexion réussie</string>
+    <string name="goToFolderLayout">Accéder aux dossiers</string>
+    <string name="addFolder">Ajouter un dossier</string>
+    <string name="title_activity_home_page">Accueil</string>
+    <string name="edit">Modifier</string>
+
+    <string name="name_error">Veuillez saisir correctement les champs.</string>
+    <string name="data_stored">Les données ont été enregistrées</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="nav_about_us">A propos de nous</string>
+    <string name="other">Autres</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="home">Accueil</string>
+    <string name="info_user">Informations</string>
+    <string name="parametre">Paramètres</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

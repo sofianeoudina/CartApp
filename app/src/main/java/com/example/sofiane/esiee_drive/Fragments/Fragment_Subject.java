@@ -1,13 +1,10 @@
 package com.example.sofiane.esiee_drive.Fragments;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -19,27 +16,15 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.sofiane.esiee_drive.Classes.Directory;
 import com.example.sofiane.esiee_drive.R;
-import com.example.sofiane.esiee_drive.folder_layout;
-import com.example.sofiane.esiee_drive.home_page;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnPausedListener;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageMetadata;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,22 +33,21 @@ import java.util.Date;
 import static android.content.ContentValues.TAG;
 
 /**
- * Created by Sofiane on 16/01/2017.
+ * Created by severin on 22/02/2017.
  */
 
-
-public class Fragment_folder extends ListFragment {
+public class Fragment_Subject extends ListFragment {
 
     FirebaseDatabase mDataBase;
     // Create a storage reference from our app
     DatabaseReference mDataRef;
-    String yearFolder = "directories";
-    OnFolderSetName mFolderName;
+    String yearName;
+    String subjectFolder = "subject";
+    OnSubjectSetName mSubjectName;
 
-    public interface OnFolderSetName {
-        public void onSendFolderName(String yearFolder, String yearName, String subjectFolder, String subjectName);
+    public interface OnSubjectSetName{
+        public void sendSubjectName(String yearFolder, String yearName, String subjectFolder, String subjectName);
     }
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -72,29 +56,40 @@ public class Fragment_folder extends ListFragment {
         Log.w(TAG, activity.toString());
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
-        /*try {
-            mFolderName = (OnFolderSetName) activity;
-        } catch (ClassCastException e) {
+        try{
+            mSubjectName = (Fragment_Subject.OnSubjectSetName)getActivity();
+        }catch(ClassCastException e){
             throw new ClassCastException(activity.toString() + "must implements OnFolderSetName");
-        }*/
+        }
     }
 
-    public void sendName() {
-        mFolderName.onSendFolderName("directories", "", "", "");
+    public void sendSubject(){
+        mSubjectName.sendSubjectName("", yearName, "", "");
+        System.out.println(yearName);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mDataBase = FirebaseDatabase.getInstance();//accessing your storage bucket is to create an instance of FirebaseStorage
         mDataRef = mDataBase.getReference(); // Create a storage reference from our app
     }
 
+    public static Fragment_Subject newInstance(String yearName) {
+        Bundle bundle = new Bundle();
+        bundle.putString("yearName", yearName);
+        Fragment_Subject fragment = new Fragment_Subject();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         //returning our layout file
         //change R.layout.your layout filename for each of your fragments
+        yearName = getArguments().getString("yearName");
         return inflater.inflate(R.layout.fragment_folder, container, false);
     }
 
@@ -108,23 +103,23 @@ public class Fragment_folder extends ListFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
-        getActivity().setTitle("Dossiers");
-
+        getActivity().setTitle("Matières");
 
         addButton = (FloatingActionButton) view.findViewById(R.id.button_add);
         lv = (ListView) view.findViewById(android.R.id.list);
 
+
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                sendName();
+                sendSubject();
             }
         });
 
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                yearFolder = items.get(position);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.content_frame, Fragment_Subject.newInstance(yearFolder), "fragment_Subject");
+                ft.replace(R.id.content_frame, Fragment_file.newInstance(yearName, items.get(position)));
                 ft.addToBackStack(null);
                 ft.commit();
             }
@@ -143,16 +138,16 @@ public class Fragment_folder extends ListFragment {
 
     }
 
-
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-
         items = new ArrayList<String>();//Création de la liste des répertoires des années
         items.clear();
         Query recentPostsQuery = null;
 
-        recentPostsQuery = mDataRef.child(yearFolder).orderByChild("folderName");
+        Log.w("onActivityCreated", yearName);
+        recentPostsQuery = mDataRef.child("directories").child(yearName).child("subject").orderByChild("folderName");
+
 
 
         ChildEventListener childEventListener = new ChildEventListener() {
@@ -206,6 +201,7 @@ public class Fragment_folder extends ListFragment {
         recentPostsQuery.addChildEventListener(childEventListener);
 
 
+
         folderAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, items);
 
@@ -214,59 +210,20 @@ public class Fragment_folder extends ListFragment {
 
     }
 
-
-    public void addFolder(String folderName) {
-        items.add(folderName);
-        folderAdapter.notifyDataSetChanged();//Actualise l'adapter
-    }
-
-
-
-
-        /*Upload from a stream*/
-
-
     /*
-    public void updateDirectory(File folder)
-    {
-        //check for permission
-        if(ContextCompat.checkSelfPermission(this,
-            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
-        //ask for permission
-        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE_PERMISSION_CODE);
+    @Override
+    public void onBackPressed() {
+
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+            //additional code
+        } else {
+            getFragmentManager().popBackStack();
         }
 
-        //On change le titre de l'activité
-
-        //On change le répertoire actuel
-        mCurrentFolder = folder;
-
-        //On vide les répertoires actuels
-        setEmpty();
-
-        //On récupère la liste des fichiers du répertoire courant
-        File[] files = m.CurrentFolder.listFiles();
-
-        if(files != null){
-            for(File f : files)
-                folderAdapter.add(f);
-
-            //On trie la liste de fichiers
-            mAdapter.sort();
-        }
-    }
-
-
-    public void setEmpty()
-    {
-        //Si l'adaptater n'est pas vide
-        if(!folderAdapter.isEmpty())
-            folderAdapter.clear();//On le vide
-    }
-
-    public void displayFileContent(File file)
-    {
-        String extension = file.getName().substring(file.getName.indexOf("." +1).toLOwerCase();
-        if(extension.)
     }*/
+
 }
+

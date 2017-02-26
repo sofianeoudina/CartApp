@@ -11,6 +11,7 @@
     tools:context="com.example.sofiane.esiee_drive.folder_layout"
     android:orientation="vertical">
 
+
     <ListView
         android:layout_width="match_parent"
         android:descendantFocusability="blocksDescendants"

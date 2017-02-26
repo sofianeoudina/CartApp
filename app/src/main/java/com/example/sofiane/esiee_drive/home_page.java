@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,8 +20,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.sofiane.esiee_drive.Fragments.FragmentInfoUser;
+import com.example.sofiane.esiee_drive.Fragments.Fragment_Subject;
 import com.example.sofiane.esiee_drive.Fragments.Fragment_folder;
 import com.example.sofiane.esiee_drive.Fragments.Fragment_home;
+import com.example.sofiane.esiee_drive.Fragments.editFolderFragment;
 import com.example.sofiane.esiee_drive.Fragments.editUserFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,7 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class home_page extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Fragment_folder.OnFolderSetName, Fragment_Subject.OnSubjectSetName{
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -91,6 +94,7 @@ public class home_page extends AppCompatActivity
         }
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -122,6 +126,7 @@ public class home_page extends AppCompatActivity
                 break;
         }
 
+        //On utilise le FragmentManager pour ajouter à l'activité les fragments de manière dynamique
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
@@ -142,5 +147,24 @@ public class home_page extends AppCompatActivity
     }
     private void goToFolderLayout(){
         startActivity(new Intent(home_page.this, folder_layout.class));
+        Log.w("start", "folder");
     }
+
+    @Override
+    public void onSendFolderName(String yearFolder, String yearName, String subjectFolder, String subjectName) {
+
+        editFolderFragment editFolderFragment = new editFolderFragment();
+        editFolderFragment.show(getSupportFragmentManager(), "dialog");
+        System.out.println(getSupportFragmentManager().getFragments());
+        editFolderFragment.receiveFolderName(yearFolder);
+    }
+
+    @Override
+    public void sendSubjectName(String yearFolder, String yearName, String subjectFolder, String subjectName) {
+
+        editFolderFragment dialogue = new editFolderFragment();
+        dialogue.show(getSupportFragmentManager(), "Dialogue");
+        dialogue.receiveYearName(yearName);
+    }
+
 }

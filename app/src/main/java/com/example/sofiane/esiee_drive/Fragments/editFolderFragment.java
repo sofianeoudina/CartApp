@@ -1,0 +1,136 @@
+package com.example.sofiane.esiee_drive.Fragments;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.example.sofiane.esiee_drive.Classes.Directory;
+import com.example.sofiane.esiee_drive.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.Date;
+import java.util.HashMap;
+
+import static android.content.ContentValues.TAG;
+
+/**
+ * Created by severin on 18/02/2017.
+ */
+public class editFolderFragment extends DialogFragment {
+
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    FirebaseStorage storage;
+    // Create a storage reference from our app
+    StorageReference storageRef;
+    String yearFolder = "directories";
+    String yearName = "";
+    String subjectFolder = "subject";
+    String subjectName = "";
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Log.w(TAG, activity.toString());
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        storage = FirebaseStorage.getInstance();//accessing your storage bucket is to create an instance of FirebaseStorage
+        StorageReference storageRef = storage.getReference().child("directories"); // Create a storage reference from our app
+    }
+
+
+    public static editFolderFragment newInstance(String yearFolder, String yearName, String subjectFolder, String subjectName){
+        Bundle bundle = new Bundle();
+        bundle.putString("yearFolder", yearFolder);
+        bundle.putString("yearName", yearName);
+        bundle.putString("subjectFolder", subjectFolder);
+        bundle.putString("subjectName", subjectName);
+
+        editFolderFragment fragment = new editFolderFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    public void receiveFolderName(String yearFolder)
+    {
+        this.yearFolder = yearFolder;
+        Log.w(TAG, yearFolder);
+    }
+
+    public void receiveYearName(String yearName)
+    {
+        this.yearName = yearName;
+        Log.w(TAG, yearName);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_edit_folder, container, false);
+
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        Button valid = (Button) view.findViewById(R.id.button_validate);
+        Button cancel = (Button) view.findViewById(R.id.button_cancel);
+        final EditText edt = (EditText) view.findViewById(R.id.edit_folder);
+
+        valid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                subjectName = edt.getText().toString();
+                // Create a storage reference from our app
+                if(yearName == "") {
+                    writeNewDirectory(edt.getText().toString(), "", edt.getText().toString(), new Date(System.currentTimeMillis()));
+                }
+                else {
+                    Log.i("dialogue", "click");
+                    writeNewDirectory(yearName, subjectName, edt.getText().toString(), new Date(System.currentTimeMillis()));
+                }
+                dismiss();
+            }
+        });
+
+       cancel.setOnClickListener(new View.OnClickListener(){
+           @Override
+           public void onClick(View v) {
+               dismiss();
+           }
+       });
+
+    }
+
+    private void writeNewDirectory(String yearName, String subjectName, String folderName, Date creationDate) {
+
+        Directory directory = new Directory(folderName, creationDate);
+
+        if(subjectName == "") {
+
+            mDatabase.child(yearFolder).child(yearName).setValue(directory);
+        }
+
+        else{
+            mDatabase.child(yearFolder).child(yearName).child(subjectFolder).child(subjectName).setValue(directory);
+        }
+    }
+
+
+
+}

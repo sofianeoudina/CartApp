@@ -28,11 +28,9 @@ public class FileInfosAdapter extends ArrayAdapter<FileInfos> {
         FileInfos f = getItem(position);
 
         TextView name_file = (TextView) root.findViewById(R.id.name_file);
-        TextView user_name = (TextView) root.findViewById(R.id.user_name);
         TextView date = (TextView) root.findViewById(R.id.date);
 
         name_file.setText(f.getName_file());
-        user_name.setText(f.getUser_name());
         date.setText(f.getDate());
 
         return root;

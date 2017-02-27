@@ -6,12 +6,10 @@ package com.example.sofiane.esiee_drive.Classes;
 
 public class FileInfos {
     String name_file;
-    String user_name;
     String date;
 
-    public FileInfos(String name_file, String user_name, String date) {
+    public FileInfos(String name_file, String date) {
         this.name_file = name_file;
-        this.user_name = user_name;
         this.date = date;
     }
 
@@ -23,13 +21,6 @@ public class FileInfos {
         this.name_file = name_file;
     }
 
-    public String getUser_name() {
-        return user_name;
-    }
-
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
-    }
 
     public String getDate() {
         return date;
@@ -43,7 +34,6 @@ public class FileInfos {
     public String toString() {
         return "FileInfos{" +
                 "name_file='" + name_file + '\'' +
-                ", user_name='" + user_name + '\'' +
                 ", date='" + date + '\'' +
                 '}';
     }

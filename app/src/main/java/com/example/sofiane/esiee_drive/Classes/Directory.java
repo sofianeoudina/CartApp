@@ -14,10 +14,19 @@ public class Directory {
     Date creationDate;
     String directory_id;
 
+    public Directory(){
+
+        this.folderName = null;
+        this.creationDate = null;
+    }
 
     public Directory(String name, Date creationDate){
 
         this.folderName = name;
+        this.creationDate = creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
 

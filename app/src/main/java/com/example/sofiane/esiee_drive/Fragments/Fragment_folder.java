@@ -60,7 +60,7 @@ public class Fragment_folder extends ListFragment {
     String yearFolder = "directories";
     OnFolderSetName mFolderName;
 
-    public interface OnFolderSetName {
+    public interface OnFolderSetName{
         public void onSendFolderName(String yearFolder, String yearName, String subjectFolder, String subjectName);
     }
 
@@ -72,14 +72,15 @@ public class Fragment_folder extends ListFragment {
         Log.w(TAG, activity.toString());
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
-        /*try {
-            mFolderName = (OnFolderSetName) activity;
-        } catch (ClassCastException e) {
+        try{
+            mFolderName = (OnFolderSetName)activity;
+        }catch(ClassCastException e){
             throw new ClassCastException(activity.toString() + "must implements OnFolderSetName");
-        }*/
+        }
     }
 
-    public void sendName() {
+    public void sendName()
+    {
         mFolderName.onSendFolderName("directories", "", "", "");
     }
 
@@ -100,7 +101,7 @@ public class Fragment_folder extends ListFragment {
 
     EditText fName;
     FloatingActionButton addButton = null;
-    ArrayList<String> items;
+    ArrayList<String>items;
     ArrayAdapter<String> folderAdapter;
     ListView lv = null; //La liste qui contient les répertoires
 
@@ -109,7 +110,6 @@ public class Fragment_folder extends ListFragment {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle("Dossiers");
-
 
         addButton = (FloatingActionButton) view.findViewById(R.id.button_add);
         lv = (ListView) view.findViewById(android.R.id.list);
@@ -135,7 +135,7 @@ public class Fragment_folder extends ListFragment {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
 
-                Log.e("long clicked", "pos: " + pos);
+                Log.e("long clicked","pos: " + pos);
 
                 return true;
             }
@@ -145,7 +145,7 @@ public class Fragment_folder extends ListFragment {
 
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
         items = new ArrayList<String>();//Création de la liste des répertoires des années
@@ -153,6 +153,7 @@ public class Fragment_folder extends ListFragment {
         Query recentPostsQuery = null;
 
         recentPostsQuery = mDataRef.child(yearFolder).orderByChild("folderName");
+
 
 
         ChildEventListener childEventListener = new ChildEventListener() {
@@ -206,6 +207,7 @@ public class Fragment_folder extends ListFragment {
         recentPostsQuery.addChildEventListener(childEventListener);
 
 
+
         folderAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, items);
 
@@ -235,38 +237,30 @@ public class Fragment_folder extends ListFragment {
         //ask for permission
         requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE_PERMISSION_CODE);
         }
-
         //On change le titre de l'activité
-
         //On change le répertoire actuel
         mCurrentFolder = folder;
-
         //On vide les répertoires actuels
         setEmpty();
-
         //On récupère la liste des fichiers du répertoire courant
         File[] files = m.CurrentFolder.listFiles();
-
         if(files != null){
             for(File f : files)
                 folderAdapter.add(f);
-
             //On trie la liste de fichiers
             mAdapter.sort();
         }
     }
-
-
     public void setEmpty()
     {
         //Si l'adaptater n'est pas vide
         if(!folderAdapter.isEmpty())
             folderAdapter.clear();//On le vide
     }
-
     public void displayFileContent(File file)
     {
         String extension = file.getName().substring(file.getName.indexOf("." +1).toLOwerCase();
         if(extension.)
     }*/
+
 }

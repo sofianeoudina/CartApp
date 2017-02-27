@@ -120,7 +120,7 @@ public class Fragment_file extends ListFragment {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                //ft.replace(R.id.content_frame, Fragment_display_file.newInstance(yearName + "/" + subjectName + "/" + items.get(position)));
+                ft.replace(R.id.content_frame, Fragment_display_file.newInstance(yearName + "/" + subjectName + "/" + items.get(position)));
                 ft.addToBackStack(null);
                 ft.commit();
             }

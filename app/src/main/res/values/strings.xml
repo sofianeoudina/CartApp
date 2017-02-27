@@ -32,7 +32,7 @@
     <string name="title_activity_home_page">Accueil</string>
     <string name="edit">Modifier</string>
     <string name="historical">Historiques</string>
-    <string name="no_historical">Il n\'y pas encore de fichier uploadé.</string>
+    <string name="no_historical">Il n\'y pas encore de fichiers uploadés.</string>
 
     <string name="name_error">Veuillez saisir correctement les champs.</string>
     <string name="data_stored">Les données ont été enregistrées</string>

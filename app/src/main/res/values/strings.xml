@@ -31,6 +31,8 @@
     <string name="addFolder">Ajouter un dossier</string>
     <string name="title_activity_home_page">Accueil</string>
     <string name="edit">Modifier</string>
+    <string name="historical">Historiques</string>
+    <string name="no_historical">Il n\'y pas encore de fichiers uploadés.</string>
 
     <string name="name_error">Veuillez saisir correctement les champs.</string>
     <string name="data_stored">Les données ont été enregistrées</string>
@@ -50,5 +52,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="text_empty">Il nya pas de dossier veuillez en créer un SVP</string>
+    <string name="text_empty">Il n\'y a pas de dossier veuillez en créer un SVP</string>
 </resources>

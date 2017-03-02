@@ -21,6 +21,18 @@ public class User {
         this.user_id = user_id;
     }
 
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public void setUser_family_name(String user_family_name) {
+        this.user_family_name = user_family_name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getEmail(){
         return email;
     }

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sofiane.esiee_drive.Classes.User;
@@ -81,10 +80,10 @@ public class editUserInfoFragment extends Fragment {
 
         mRef = database.getReference().child("users").child(userId);
 
-        readDataFromDatabase(userId);
+        readDataFromDatabase();
 
     }
-    private void readDataFromDatabase(final String userId){
+    private void readDataFromDatabase(){
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -95,8 +94,6 @@ public class editUserInfoFragment extends Fragment {
                 String mail = String.valueOf(dataSnapshot.child("email").getValue());
 
                 user = new User(username, name, mail);
-                user.setUser_id(userId);
-
                 et_name.setText(user.getUser_name());
                 et_family_name.setText(user.getUser_family_name());
             }
@@ -110,6 +107,8 @@ public class editUserInfoFragment extends Fragment {
     }
 
     private void storeDataInDatabase(String name, String family_name){
-        
+        user.setUser_name(name);
+        user.setUser_family_name(family_name);
+        mRef.setValue(user);
     }
 }

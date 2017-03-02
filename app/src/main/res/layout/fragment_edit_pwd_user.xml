@@ -14,15 +14,7 @@ android:layout_height="fill_parent">
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/editText6"
-        android:hint="Entrer votre mot de passe actuel" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/editText4"
+        android:id="@+id/edit_pwd"
         android:hint="Entrer votre nouveau mot de passe" />
 
     <EditText
@@ -30,7 +22,7 @@ android:layout_height="fill_parent">
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/editText5"
+        android:id="@+id/edit_confirm_pwd"
         android:hint="Confirmer votre nouveau mot de passe" />
 </LinearLayout>
 

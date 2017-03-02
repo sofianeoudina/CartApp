@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.sofiane.esiee_drive.Classes.Directory;
 import com.example.sofiane.esiee_drive.R;
@@ -31,8 +32,7 @@ import static android.content.ContentValues.TAG;
  */
 public class editFolderFragment extends DialogFragment {
 
-    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    FirebaseStorage storage;
+    DatabaseReference mDatabase;
     // Create a storage reference from our app
     StorageReference storageRef;
     String yearFolder = "directories";
@@ -40,6 +40,8 @@ public class editFolderFragment extends DialogFragment {
     String subjectFolder = "subject";
     String subjectName = "";
 
+    private String title;
+    private String message;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -49,17 +51,15 @@ public class editFolderFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        storage = FirebaseStorage.getInstance();//accessing your storage bucket is to create an instance of FirebaseStorage
-        StorageReference storageRef = storage.getReference().child("directories"); // Create a storage reference from our app
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
 
-    public static editFolderFragment newInstance(String yearFolder, String yearName, String subjectFolder, String subjectName){
+    public static editFolderFragment newInstance(String title, String message){
         Bundle bundle = new Bundle();
-        bundle.putString("yearFolder", yearFolder);
-        bundle.putString("yearName", yearName);
-        bundle.putString("subjectFolder", subjectFolder);
-        bundle.putString("subjectName", subjectName);
+        bundle.putString("title", title);
+        bundle.putString("message", message);
+
 
         editFolderFragment fragment = new editFolderFragment();
         fragment.setArguments(bundle);
@@ -81,6 +81,8 @@ public class editFolderFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        this.title = getArguments().getString("title");
+        this.message = getArguments().getString("message");
         return inflater.inflate(R.layout.fragment_edit_folder, container, false);
 
     }
@@ -90,12 +92,17 @@ public class editFolderFragment extends DialogFragment {
         Button valid = (Button) view.findViewById(R.id.button_validate);
         Button cancel = (Button) view.findViewById(R.id.button_cancel);
         final EditText edt = (EditText) view.findViewById(R.id.edit_folder);
+        final TextView tv = (TextView) view.findViewById(android.R.id.title);
+
+        tv.setText(title);
+        edt.setHint(message);
 
         valid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 subjectName = edt.getText().toString();
+
                 // Create a storage reference from our app
                 if(yearName == "") {
                     writeNewDirectory(edt.getText().toString(), "", edt.getText().toString(), new Date(System.currentTimeMillis()));

@@ -153,16 +153,16 @@ public class home_page extends AppCompatActivity
     @Override
     public void onSendFolderName(String yearFolder, String yearName, String subjectFolder, String subjectName) {
 
-        editFolderFragment editFolderFragment = new editFolderFragment();
-        editFolderFragment.show(getSupportFragmentManager(), "dialog");
+        editFolderFragment dialogue = editFolderFragment.newInstance("Nom de promo", "Veuillez saisir le nom de promo");
+        dialogue.show(getSupportFragmentManager(), "dialog");
         System.out.println(getSupportFragmentManager().getFragments());
-        editFolderFragment.receiveFolderName(yearFolder);
+        dialogue.receiveFolderName(yearFolder);
     }
 
     @Override
     public void sendSubjectName(String yearFolder, String yearName, String subjectFolder, String subjectName) {
 
-        editFolderFragment dialogue = new editFolderFragment();
+        editFolderFragment dialogue = editFolderFragment.newInstance("Nom de la matière", "Veuillez saisir le nom de la matière");
         dialogue.show(getSupportFragmentManager(), "Dialogue");
         dialogue.receiveYearName(yearName);
     }

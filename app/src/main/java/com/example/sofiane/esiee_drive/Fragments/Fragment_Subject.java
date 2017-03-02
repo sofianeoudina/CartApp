@@ -28,6 +28,8 @@ import com.google.firebase.database.Query;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import static android.content.ContentValues.TAG;
@@ -38,12 +40,13 @@ import static android.content.ContentValues.TAG;
 
 public class Fragment_Subject extends ListFragment {
 
-    FirebaseDatabase mDataBase;
+    private FirebaseDatabase mDataBase;
     // Create a storage reference from our app
-    DatabaseReference mDataRef;
-    String yearName;
-    String subjectFolder = "subject";
-    OnSubjectSetName mSubjectName;
+    private DatabaseReference mDataRef;
+    private String yearName;
+    private String subjectFolder = "subject";
+    private OnSubjectSetName mSubjectName;
+    private ArrayList<String> items;
 
     public interface OnSubjectSetName{
         public void sendSubjectName(String yearFolder, String yearName, String subjectFolder, String subjectName);
@@ -74,77 +77,12 @@ public class Fragment_Subject extends ListFragment {
 
         mDataBase = FirebaseDatabase.getInstance();//accessing your storage bucket is to create an instance of FirebaseStorage
         mDataRef = mDataBase.getReference(); // Create a storage reference from our app
-    }
 
-    public static Fragment_Subject newInstance(String yearName) {
-        Bundle bundle = new Bundle();
-        bundle.putString("yearName", yearName);
-        Fragment_Subject fragment = new Fragment_Subject();
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        //returning our layout file
-        //change R.layout.your layout filename for each of your fragments
-        yearName = getArguments().getString("yearName");
-        return inflater.inflate(R.layout.fragment_folder, container, false);
-    }
-
-    EditText fName;
-    FloatingActionButton addButton = null;
-    ArrayList<String> items;
-    ArrayAdapter<String> folderAdapter;
-    ListView lv = null; //La liste qui contient les répertoires
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        //you can set the title for your toolbar here for different fragments different titles
-        getActivity().setTitle("Matières");
-
-        addButton = (FloatingActionButton) view.findViewById(R.id.button_add);
-        lv = (ListView) view.findViewById(android.R.id.list);
-
-
-        addButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                sendSubject();
-            }
-        });
-
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.content_frame, Fragment_file.newInstance(yearName, items.get(position)));
-                ft.addToBackStack(null);
-                ft.commit();
-            }
-        });
-
-        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                           int pos, long id) {
-
-                Log.e("long clicked", "pos: " + pos);
-
-                return true;
-            }
-        });
-
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState){
-        super.onActivityCreated(savedInstanceState);
         items = new ArrayList<String>();//Création de la liste des répertoires des années
         items.clear();
         Query recentPostsQuery = null;
 
+        yearName = getArguments().getString("yearName");
         Log.w("onActivityCreated", yearName);
         recentPostsQuery = mDataRef.child("directories").child(yearName).child("subject").orderByChild("folderName");
 
@@ -207,6 +145,79 @@ public class Fragment_Subject extends ListFragment {
 
 
         setListAdapter(folderAdapter);
+
+    }
+
+    public static Fragment_Subject newInstance(String yearName) {
+        Bundle bundle = new Bundle();
+        bundle.putString("yearName", yearName);
+        Fragment_Subject fragment = new Fragment_Subject();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        //returning our layout file
+        //change R.layout.your layout filename for each of your fragments
+        return inflater.inflate(R.layout.fragment_folder, container, false);
+    }
+
+    EditText fName;
+    FloatingActionButton addButton = null;
+    ArrayAdapter<String> folderAdapter;
+    ListView lv = null; //La liste qui contient les répertoires
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //you can set the title for your toolbar here for different fragments different titles
+        getActivity().setTitle("Matières");
+
+        addButton = (FloatingActionButton) view.findViewById(R.id.button_add);
+        lv = (ListView) view.findViewById(android.R.id.list);
+
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sendSubject();
+            }
+        });
+
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.content_frame, Fragment_file.newInstance(yearName, items.get(position)));
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+        });
+
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, long id) {
+
+                Log.e("long clicked", "pos: " + pos);
+
+                return true;
+            }
+        });
+
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+
+        Collections.sort(items, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                return s1.compareToIgnoreCase(s2);
+            }
+        });
 
     }
 
